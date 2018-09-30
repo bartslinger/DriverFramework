@@ -34,6 +34,7 @@
 #pragma once
 
 #include "MagSensor.hpp"
+#include <perf/perf_counter.h>
 
 namespace DriverFramework
 {
@@ -52,7 +53,8 @@ class AK8963 : public MagSensor
 {
 public:
 	AK8963(const char *device_path) :
-		MagSensor(device_path, AK8963_MEASURE_INTERVAL_US)
+		MagSensor(device_path, AK8963_MEASURE_INTERVAL_US),
+		_perf_interval(perf_alloc(PC_INTERVAL, "ak8963_interval"))
 	{
 		m_id.dev_id_s.devtype = DRV_DF_DEVTYPE_AK8963;
 		m_id.dev_id_s.address = AK8963_SLAVE_ADDRESS;
@@ -70,6 +72,7 @@ protected:
 
 private:
 	float _mag_sens_adj[3];
+	perf_counter_t _perf_interval;
 
 	// returns 0 on success, -errno on failure
 	int ak8963_init();

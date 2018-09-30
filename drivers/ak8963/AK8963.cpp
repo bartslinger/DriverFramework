@@ -357,6 +357,7 @@ int AK8963::stop()
 
 void AK8963::_measure()
 {
+	perf_count(_perf_interval);
 #pragma pack(push, 1)
 	struct sample {
 		int16_t val[3];
